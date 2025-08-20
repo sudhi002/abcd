@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Harshitha, A Forever Promise ❤️</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Great+Vibes&family=Parisienne&display=swap');
+
+  body {
+    margin: 0; padding: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #630f27 0%, #f7ade4 100%);
+    font-family: 'Dancing Script', cursive;
+    color: #f7e4e8;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    position: relative;
+  }
+
+  #letterBox {
+    position: fixed;
+    top: 12vh;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 400px;
+    width: 90vw;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 30px;
+    border: 3px solid #f49ac1;
+    box-shadow: 0 0 40px #f49ac1aa inset;
+    padding: 32px 36px;
+    text-align: center;
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.8em;
+    color: #86194f;
+    line-height: 1.5;
+    opacity: 1;
+    user-select: text;
+    z-index: 10;
+  }
+
+  button {
+    font-family: 'Parisienne', cursive;
+    font-size: 2em;
+    padding: 16px 60px;
+    border-radius: 40px;
+    border: none;
+    background: linear-gradient(45deg, #ffaad6, #c8328c);
+    color: #fff;
+    box-shadow: 0 0 35px #e64dbfcc;
+    cursor: pointer;
+    user-select: none;
+    margin: 20px 12px 0 12px;
+    opacity: 0;
+    transition: opacity 0.8s ease, transform 0.4s ease;
+    z-index: 12;
+    display: none;
+    animation: pulse 2s infinite ease-in-out;
+  }
+  button.show {
+    display: inline-block;
+    opacity: 1;
+  }
+  button:hover, button:focus {
+    background: linear-gradient(45deg, #ff85c3, #ae2e7b);
+    outline: none;
+    transform: scale(1.15);
+    box-shadow: 0 0 48px #f742ccff;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 35px #e64dbfcc; }
+    50% { box-shadow: 0 0 60px #f86ad4ff; }
+  }
+
+  #celebration {
+    font-family: 'Great Vibes', cursive;
+    font-size: 5em;
+    color: #ff67a2;
+    text-shadow:
+      0 0 30px #ff3d85,
+      0 0 60px #ff2e70,
+      0 0 90px #ff1f5a;
+    margin-top: 50px;
+    opacity: 0;
+    user-select: none;
+    z-index: 15;
+    transition: opacity 2s ease;
+    position: relative;
+  }
+  #celebration.visible {
+    opacity: 1;
+  }
+
+  /* Floating sparkle hearts during celebration */
+  .celebrate-heart {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: #ff3e70;
+    clip-path: polygon(50% 0%, 75% 20%, 80% 45%, 50% 85%, 20% 45%, 25% 20%);
+    opacity: 0.8;
+    animation: floatUpCelebrate linear forwards;
+    filter: drop-shadow(0 0 8px #ff559b);
+  }
+  @keyframes floatUpCelebrate {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 0.85;
+    }
+    100% {
+      transform: translateY(-300px) scale(1.4);
+      opacity: 0;
+    }
+  }
+
+  /* Rose petals */
+  .petal {
+    position: fixed;
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle at center, #db7b6a, #f4b1a0);
+    border-radius: 50% 40% 40% 50%;
+    filter: drop-shadow(0 0 6px #ba7267);
+    animation: petalFall linear forwards;
+    pointer-events: none;
+    opacity: 0.9;
+    transform-origin: center;
+    z-index: 14;
+  }
+  @keyframes petalFall {
+    0% { transform: translateY(-15px) rotate(0deg); opacity: 0.9; }
+    100% { transform: translateY(100vh) rotate(350deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="letterBox"></div>
+
+<button id="readyBtn">I’m ready with my decision</button>
+<button id="yesBtn">Yes! Of Course! ❤️</button>
+
+<div id="celebration">Yeyyyyy!!!! 🎉❤️</div>
+
+<audio id="bgMusic" autoplay loop>
+  <source src="abhi_na_jao.mp3" type="audio/mp3" />
+  Your browser does not support the audio element.
+</audio>
+
+<script>
+  const letterBox = document.getElementById('letterBox');
+  const readyBtn = document.getElementById('readyBtn');
+  const yesBtn = document.getElementById('yesBtn');
+  const celebration = document.getElementById('celebration');
+  const bgMusic = document.getElementById('bgMusic');
+
+  const messages = [
+    "My darling Harshitha, your smile lights up my universe.",
+    "With every moment, I fall deeper in love with you.",
+    "You are my calm, my joy, my everything.",
+    "This gift hides my heart, just for you to find.",
+    "Open your heart, my love, I’m forever yours."
+  ];
+
+  let index = 0;
+  let heartsInterval;
+
+  bgMusic.volume = 0.3;
+  bgMusic.play().catch(() => {});
+
+  function typeText(text, el, i = 0) {
+    if (i < text.length) {
+      el.textContent += text.charAt(i);
+      setTimeout(() => typeText(text, el, i + 1), 30);
+    }
+  }
+
+  function showNextMessage() {
+    if (index < messages.length) {
+      letterBox.textContent = '';
+      letterBox.classList.add('visible');
+      typeText(messages[index], letterBox);
+      index++;
+      if (index === messages.length) {
+        readyBtn.classList.add('show');
+        window.removeEventListener('click', nextClickHandler);
+      }
+    }
+  }
+
+  function nextClickHandler() {
+    showNextMessage();
+  }
+  window.addEventListener('click', nextClickHandler);
+
+  readyBtn.addEventListener('click', () => {
+    readyBtn.classList.remove('show');
+    yesBtn.classList.add('show');
+  });
+
+  yesBtn.addEventListener('click', () => {
+    yesBtn.classList.remove('show');
+    letterBox.style.display = 'none';
+    celebration.classList.add('visible');
+    startConfetti();
+    startRosePetals();
+    startFloatingHearts();
+  });
+
+  const confettiCanvas = document.createElement('canvas');
+  confettiCanvas.style.position = 'fixed';
+  confettiCanvas.style.top = '0';
+  confettiCanvas.style.left = '0';
+  confettiCanvas.style.width = '100vw';
+  confettiCanvas.style.height = '100vh';
+  confettiCanvas.style.pointerEvents = 'none';
+  confettiCanvas.style.zIndex = '20';
+  document.body.appendChild(confettiCanvas);
+  const confettiCtx = confettiCanvas.getContext('2d');
+
+  let confettiParticles = [];
+  let confettiRunning = false;
+
+  function resizeConfetti() {
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeConfetti);
+  resizeConfetti();
+
+  function createConfettiParticles(count = 150) {
+    const colors = ['#ffd1dc', '#ff6a93', '#ff95b7', '#ff4781', '#ffb6c1', '#ffd700', '#ffc0cb'];
+    let particles = [];
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * confettiCanvas.width,
+        y: Math.random() * confettiCanvas.height - confettiCanvas.height,
+        r: 5 + Math.random() * 5,
+        d: 10 + Math.random() * 10,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        tilt: Math.floor(Math.random() * 10) - 10,
+        tiltAngle: 0,
+        tiltAngleInc: 0.05 + Math.random() * 0.05,
+      });
+    }
+    return particles;
+  }
+
+  function drawConfettiFrame() {
+    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    confettiParticles.forEach((p) => {
+      confettiCtx.beginPath();
+      confettiCtx.lineWidth = p.r / 2;
+      confettiCtx.strokeStyle = p.color;
+      confettiCtx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+      confettiCtx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+      confettiCtx.stroke();
+
+      p.tiltAngle += p.tiltAngleInc;
+      p.y += p.d / 2;
+      p.tilt = Math.sin(p.tiltAngle) * 12;
+
+      if (p.y > confettiCanvas.height) {
+        p.x = Math.random() * confettiCanvas.width;
+        p.y = -10;
+        p.tilt = Math.floor(Math.random() * 10) - 10;
+      }
+    });
+    if (confettiRunning) requestAnimationFrame(drawConfettiFrame);
+  }
+
+  function startConfetti() {
+    confettiParticles = createConfettiParticles();
+    confettiRunning = true;
+    drawConfettiFrame();
+    setTimeout(() => {
+      confettiRunning = false;
+      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    }, 9000);
+  }
+
+  // Rose petals animation
+  function startRosePetals() {
+    let count = 80;
+    for (let i = 0; i < count; i++) {
+      let petal = document.createElement('div');
+      petal.className = 'petal';
+      petal.style.left = Math.random() * window.innerWidth + 'px';
+      petal.style.animationDuration = 7 + Math.random() * 5 + 's';
+      petal.style.animationDelay = Math.random() * 5 + 's';
+      document.body.appendChild(petal);
+      petal.addEventListener('animationend', () => petal.remove());
+    }
+  }
+
+  // Heart floating animation on celebration
+  function startFloatingHearts() {
+    heartsInterval = setInterval(() => {
+      let heart = document.createElement('div');
+      heart.className = 'celebrate-heart';
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.animationDuration = 4000 + Math.random() * 3000 + 'ms';
+      heart.style.opacity = (0.5 + Math.random() * 0.5).toFixed(2);
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 7000);
+    }, 400);
+  }
+
+</script>
+
+<style>
+  /* Hearts for celebration */
+  .celebrate-heart {
+    position: fixed;
+    width: 24px;
+    height: 24px;
+    background: #ff3e70;
+    clip-path: polygon(50% 0%, 75% 20%, 80% 45%, 50% 85%, 20% 45%, 25% 20%);
+    opacity: 0.85;
+    filter: drop-shadow(0 0 8px #ff559b);
+    animation-name: floatUpCelebrate;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+  @keyframes floatUpCelebrate {
+    0% { transform: translateY(0) scale(1); opacity: 0.85;}
+    100% { transform: translateY(-300px) scale(1.4); opacity: 0;}
+  }
+</style>
+</body>
+</html>
